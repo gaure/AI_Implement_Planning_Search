@@ -222,9 +222,15 @@ class AirCargoProblem(Problem):
         carried out from the current state in order to satisfy all of the goal
         conditions by ignoring the preconditions required for an action to be
         executed.
+        :type node: object
         """
         # TODO implement (see Russell-Norvig Ed-3 10.2.3  or Russell-Norvig Ed-2 11.2)
-        count = 0
+        count = len(self.goal)
+        kb = PropKB()
+        kb.tell(decode_state(node.state, self.state_map).pos_sentence())
+        for literal in self.goal:
+            if literal in kb.clauses:
+                count -= 1
         return count
 
 
@@ -368,11 +374,13 @@ def air_cargo_p3() -> AirCargoProblem:
 #         pass
 # import inspect
 # f = air_cargo_p1()
-# # actions = f.get_actions()
-# # for a in actions:
-# #     print("     {} {} {} {} {}".format(a.name,a.args,a.precond_pos,a.effect_add,a.effect_rem))
+# actions = f.get_actions()
+# for a in actions:
+#     print("     {} {} {} {} {}".format(a.name,a.args,a.precond_pos,a.effect_add,a.effect_rem))
 # print("This is the map: {}".format(f.state_map))
 # print("This is the initial state coded: {}".format(f.initial))
 # print("This is the inital state decoded: {}".format(decode_state(f.initial,f.state_map).pos_sentence()))
-# for action in f.get_actions():
-#     print("Available action {} and precond {}".format(action,action.precond_pos))
+# print("The decoded state type is: {}".format(type(decode_state(f.initial,f.state_map).pos_sentence())))
+# print("This is the goal state literals: {}".format(f.goal))
+#for action in f.get_actions():
+#    print("Available action {} and precond {}".format(action,action.precond_pos))
